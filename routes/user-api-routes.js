@@ -4,14 +4,7 @@ module.exports = function(app) {
 
     // FIND ALL USERS
   app.get("/api/users", function(req, res) {
-    db.User.findAll({
-      include: [
-        {
-          model: db.Family,
-          model: db.Chore
-        }
-      ]
-    }).then(function(dbUser) {
+    db.User.findAll({}).then(function(dbUser) {
       res.json(dbUser);
     });
   });
@@ -20,34 +13,12 @@ module.exports = function(app) {
   app.get("/api/users/:id", function(req, res) {
     db.User.findOne({
       where: {
-        Fbid: req.params.id
-      },
-      include: [
-        {
-          model: db.Family,
-          model: db.Chore
-        }
-      ]
+        id: req.params.id
+      }
     }).then(function(dbUser) {
       res.json(dbUser);
     });
   });
-
-      // FIND USER BY FAMILYID
-      app.get("/api/users/family/:FamilyUuid", function(req, res) {
-        db.User.findAll({
-          where: {
-            FamilyUuid: req.params.FamilyUuid
-          },
-          include: [
-            {
-              model: db.Chore
-            }
-          ]
-        }).then(function(dbUser) {
-          res.json(dbUser);
-        });
-      });
 
 
     // CREATE A NEW USER
@@ -68,21 +39,15 @@ module.exports = function(app) {
     });
   });
 
-  // UPDATE A USER BY THEIR ID  ** NOT WORKING RIGHT **
+  // UPDATE A USER BY THEIR ID
 
   app.put("/api/users/:id", function(req, res) {
     db.User.update(
       req.body,
       {
       where: {
-        Fbid: req.params.id
-      },
-      include: [
-        {
-          model: db.Family,
-          // model: db.Chore
-        }
-      ]
+        id: req.params.id
+      }
     }).then(function(dbUser) {
       res.json(dbUser);
     });
